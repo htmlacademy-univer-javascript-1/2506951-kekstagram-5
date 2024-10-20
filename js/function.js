@@ -8,28 +8,11 @@ function isPalindrome(str) {
   return normalizedStr === reversedStr;
 }
 
-/*function printResult(message, result) {
-  console.log(`${message}: ${result}`);
-}
+// Пример вызова функции checkStringLength
+const string1 = 'Привет, мир!';
+checkStringLength(string1, 12);
 
-// Проверка длины строки
-let result1 = checkStringLength('проверяемая строка', 20); // true
-let result2 = checkStringLength('проверяемая строка', 18); // true
-let result3 = checkStringLength('проверяемая строка', 10); // false
 
-// Вывод результатов
-printResult('Строка короче 20 символов', result1);
-printResult('Длина строки ровно 18 символов', result2);
-printResult('Строка длиннее 10 символов', result3);
-
-// Проверка палиндромов
-let palindromeResult1 = isPalindrome('топот'); // true
-let palindromeResult2 = isPalindrome('ДовОд'); // true
-let palindromeResult3 = isPalindrome('Кекс');  // false
-let palindromeResult4 = isPalindrome('Лёша на полке клопа нашёл'); // true
-
-// Вывод результатов
-printResult('Строка "топот" является палиндромом', palindromeResult1);
-printResult('Строка "ДовОд" является палиндромом', palindromeResult2);
-printResult('Строка "Кекс" является палиндромом', palindromeResult3);
-printResult('Строка "Лёша на полке клопа нашёл" является палиндромом', palindromeResult4);*/
+// Пример вызова функции isPalindrome
+const string2 = 'А роза упала на лапу Азора';
+isPalindrome(string2);
