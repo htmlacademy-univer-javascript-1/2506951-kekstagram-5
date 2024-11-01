@@ -1,27 +1,30 @@
 import { arrayObjects } from './data.js';
+import { renderFullsizePhoto } from './fullsizePhoto.js';
 
-const picturesContainer = document.querySelector('.pictures'); // Находим контейнер для фотографий
-const pictureTemplate = document.getElementById('picture').content; // Получаем шаблон
+const picturesContainer = document.querySelector('.pictures');
+const pictureTemplate = document.getElementById('picture').content;
 
-// Функция для отрисовки миниатюр
 const renderPictures = (photoData) => {
   const fragment = document.createDocumentFragment();
 
-  photoData.forEach(({ url, description, likes, comments }) => {
-    const pictureElement = pictureTemplate.cloneNode(true); // Клонируем шаблон
+  photoData.forEach((photo) => {
+    const pictureElement = pictureTemplate.cloneNode(true);
 
-    // Заполняем данные в шаблоне
-    pictureElement.querySelector('.picture__img').src = url;
-    pictureElement.querySelector('.picture__img').alt = description;
-    pictureElement.querySelector('.picture__likes').textContent = likes;
-    pictureElement.querySelector('.picture__comments').textContent = comments.length;
+    pictureElement.querySelector('.picture__img').src = photo.url;
+    pictureElement.querySelector('.picture__img').alt = photo.description;
+    pictureElement.querySelector('.picture__likes').textContent = photo.likes;
+    pictureElement.querySelector('.picture__comments').textContent = photo.comments.length;
 
-    fragment.appendChild(pictureElement); // Добавляем элемент в фрагмент
+    // Открытие полноразмерного изображения при клике
+    pictureElement.querySelector('.picture').addEventListener('click', () => {
+      renderFullsizePhoto(photo);
+    });
+
+    fragment.appendChild(pictureElement);
   });
 
-  picturesContainer.appendChild(fragment); // Вставляем все элементы в контейнер
+  picturesContainer.appendChild(fragment);
 };
 
-// Генерируем массив фотографий и вызываем функцию отрисовки
-const generatedPhotos = arrayObjects(25); // Генерация 25 объектов фотографий
-renderPictures(generatedPhotos); // Вызов функции отрисовки
+const generatedPhotos = arrayObjects(25);
+renderPictures(generatedPhotos);
