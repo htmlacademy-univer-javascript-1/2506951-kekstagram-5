@@ -8,16 +8,15 @@ const commentCountBlock = bigPictureContainer.querySelector('.social__comment-co
 const commentsLoader = bigPictureContainer.querySelector('.comments-loader');
 const closeButton = bigPictureContainer.querySelector('.big-picture__cancel');
 
-// Функция для отрисовки полноразмерного изображения
-const renderFullsizePhoto = ({ url, likes, comments, description }) => {
-  bigPictureImage.src = url;
-  likesCount.textContent = likes;
-  commentsCount.textContent = comments.length;
-  socialCaption.textContent = description;
+let commentsData = [];
+let currentCommentsShown = 0;
+const COMMENTS_PER_LOAD = 5;
 
-  // Очистка и добавление комментариев
-  socialComments.innerHTML = '';
-  comments.forEach(({ avatar, message, name }) => {
+// Функция для отрисовки комментариев
+const renderComments = () => {
+  const nextComments = commentsData.slice(currentCommentsShown, currentCommentsShown + COMMENTS_PER_LOAD);
+
+  nextComments.forEach(({ avatar, message, name }) => {
     const commentElement = document.createElement('li');
     commentElement.classList.add('social__comment');
     commentElement.innerHTML = `
@@ -27,13 +26,36 @@ const renderFullsizePhoto = ({ url, likes, comments, description }) => {
     socialComments.appendChild(commentElement);
   });
 
-  // Скрытие ненужных элементов
-  commentCountBlock.classList.add('hidden');
-  commentsLoader.classList.add('hidden');
+  currentCommentsShown += nextComments.length; // Обновляем количество показанных комментариев
+  commentCountBlock.textContent = `${currentCommentsShown} из ${commentsData.length} комментариев`; // Обновляем счетчик комментариев
+
+  // Скрываем кнопку "Загрузить ещё", если все комментарии показаны
+  if (currentCommentsShown >= commentsData.length) {
+    commentsLoader.classList.add('hidden');
+  }
+};
+
+// Функция для отрисовки полноразмерного изображения
+const renderFullsizePhoto = ({ url, likes, comments, description }) => {
+  bigPictureImage.src = url;
+  likesCount.textContent = likes;
+  commentsCount.textContent = comments.length;
+  socialCaption.textContent = description;
+
+  // Сохранение данных комментариев
+  commentsData = comments;
+  currentCommentsShown = 0; // Сбрасываем количество показанных комментариев
+
+  // Очистка и добавление первых 5 комментариев
+  socialComments.innerHTML = '';
+  renderComments();
+
+  // Показываем блоки с количеством комментариев и кнопкой загрузки
+  commentCountBlock.classList.remove('hidden');
+  commentsLoader.classList.remove('hidden');
   document.body.classList.add('modal-open');
   bigPictureContainer.classList.remove('hidden');
 };
-
 // Закрытие окна
 const closeFullsizePhoto = () => {
   bigPictureContainer.classList.add('hidden');
@@ -47,5 +69,8 @@ document.addEventListener('keydown', (evt) => {
     closeFullsizePhoto();
   }
 });
+
+// Обработчик загрузки дополнительных комментариев
+commentsLoader.addEventListener('click', renderComments);
 
 export { renderFullsizePhoto };
