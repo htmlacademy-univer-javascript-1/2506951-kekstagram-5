@@ -1,3 +1,5 @@
+import { setupPhotoCloseHandlers } from './util.js';
+
 const bigPictureContainer = document.querySelector('.big-picture');
 const bigPictureImage = bigPictureContainer.querySelector('.big-picture__img img');
 const likesCount = bigPictureContainer.querySelector('.likes-count');
@@ -7,6 +9,9 @@ const socialCaption = bigPictureContainer.querySelector('.social__caption');
 const commentCountBlock = bigPictureContainer.querySelector('.social__comment-count');
 const commentsLoader = bigPictureContainer.querySelector('.comments-loader');
 const closeButton = bigPictureContainer.querySelector('.big-picture__cancel');
+
+// Установка обработчиков закрытия окна
+setupPhotoCloseHandlers(bigPictureContainer, closeButton, document.body);
 
 let commentsData = [];
 let currentCommentsShown = 0;
@@ -52,23 +57,14 @@ const renderFullsizePhoto = ({ url, likes, comments, description }) => {
 
   // Показываем блоки с количеством комментариев и кнопкой загрузки
   commentCountBlock.classList.remove('hidden');
-  commentsLoader.classList.remove('hidden');
+
+  if (commentsData.length > 5) {
+    commentsLoader.classList.remove('hidden');
+  }
   document.body.classList.add('modal-open');
+
   bigPictureContainer.classList.remove('hidden');
 };
-// Закрытие окна
-const closeFullsizePhoto = () => {
-  bigPictureContainer.classList.add('hidden');
-  document.body.classList.remove('modal-open');
-};
-
-// Обработчик закрытия по кнопке и по ESC
-closeButton.addEventListener('click', closeFullsizePhoto);
-document.addEventListener('keydown', (evt) => {
-  if (evt.key === 'Escape') {
-    closeFullsizePhoto();
-  }
-});
 
 // Обработчик загрузки дополнительных комментариев
 commentsLoader.addEventListener('click', renderComments);

@@ -6,6 +6,8 @@
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/style.css">
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.3/nouislider.min.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.3/nouislider.min.js"></script>
   <title>Кекстаграм</title>
 </head>
 
@@ -30,7 +32,8 @@
       <section class="img-upload">
         <div class="img-upload__wrapper">
           <h2 class="img-upload__title  visually-hidden">Загрузка фотографии</h2>
-          <form class="img-upload__form" id="upload-select-image" autocomplete="off">
+          <form class="img-upload__form" id="upload-select-image" method="POST" enctype="multipart/form-data" action="https://29.javascript.htmlacademy.pro/kekstagram" autocomplete="off">
+
 
             <!-- Изначальное состояние поля для загрузки изображения -->
             <fieldset class="img-upload__start">
