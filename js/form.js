@@ -1,9 +1,8 @@
-import { handleHashtagInput, preventFormClosureOnEsc, handleCommentInput } from './util.js';
+import {pristine, hashtagsInput, descriptionInput} from './util.js';
 
 // Ссылки на элементы
-const hashtagsInput = document.querySelector('.text__hashtags');
-const commentInput = document.querySelector('.text__description');
 const uploadInput = document.querySelector('.img-upload__input');
+const submitButton = document.querySelector('.img-upload__submit');
 const uploadOverlay = document.querySelector('.img-upload__overlay');
 const body = document.querySelector('body');
 const uploadCancelButton = document.querySelector('.img-upload__cancel');
@@ -15,14 +14,6 @@ const effectLevel = document.querySelector('.effect-level');
 const effectLevelValue = document.querySelector('.effect-level__value');
 const effectRadioButtons = document.querySelectorAll('.effects__radio');
 const sliderElement = document.querySelector('.effect-level__slider');
-
-// Обработчики для хэштегов
-hashtagsInput.addEventListener('input', handleHashtagInput(hashtagsInput));
-hashtagsInput.addEventListener('keydown', preventFormClosureOnEsc);
-
-// Обработчики для комментариев
-commentInput.addEventListener('input', handleCommentInput(commentInput));
-commentInput.addEventListener('keydown', preventFormClosureOnEsc);
 
 // Обновление эффекта изображения
 const updateImageEffect = (effect, value) => {
@@ -167,6 +158,11 @@ const closeUploadForm = () => {
   imgPreview.style.transform = 'scale(1)';
   document.querySelector('.effects__radio[value="none"]').checked = true;
   effectLevel.classList.add('hidden'); // Скрываем слайдер для дефолтного эффекта
+  submitButton.disabled = false;
+  hashtagsInput.value = ''; // Очистка поля
+  descriptionInput.value = '';
+  pristine.reset(); // Сброс всех ошибок
+  pristine.validate(); // Повторная валидация
 };
 
 // Обработчик события для выбора файла
@@ -220,3 +216,5 @@ effectLevel.classList.add('hidden'); // Скрываем слайдер для �
 effectRadioButtons.forEach((button) => {
   button.addEventListener('change', onEffectChange);
 });
+
+
