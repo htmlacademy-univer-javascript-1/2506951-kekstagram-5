@@ -216,5 +216,3 @@ effectLevel.classList.add('hidden'); // Скрываем слайдер для �
 effectRadioButtons.forEach((button) => {
   button.addEventListener('change', onEffectChange);
 });
-
-
