@@ -1,9 +1,11 @@
-import { arrayObjects } from './data.js';
 import { renderFullsizePhoto } from './fullsizePhoto.js';
+import { getData } from './api.js'; // Подключаем модуль для работы с API
+import { showErrorModal } from './message.js';
 
 const picturesContainer = document.querySelector('.pictures');
 const pictureTemplate = document.getElementById('picture').content;
 
+// Функция для отрисовки миниатюр
 const renderPictures = (photoData) => {
   const fragment = document.createDocumentFragment();
 
@@ -26,5 +28,13 @@ const renderPictures = (photoData) => {
   picturesContainer.appendChild(fragment);
 };
 
-const generatedPhotos = arrayObjects(25);
-renderPictures(generatedPhotos);
+// Основная функция для загрузки и отрисовки данных
+export const initializeGallery = async () => {
+  try {
+    const photoData = await getData(); // Используем getData из API модуля
+    renderPictures(photoData);
+  } catch (error) {
+    showErrorModal();// Логируем ошибку для отладки
+    // Здесь можно вызвать функцию отображения модального окна ошибки
+  }
+};
