@@ -1,8 +1,16 @@
-import {pristine, hashtagsInput, descriptionInput} from './util.js';
+import {pristine, form, hashtagsInput, descriptionInput, isEscapeKey} from './util.js';
+import { sendData } from './api.js'; // Импорт функции отправки данных
+import { showMessage } from './message.js';
+
+
+// Масштаб изображения
+const MIN_SCALE = 25;
+const MAX_SCALE = 100;
+const SCALE_STEP = 25;
 
 // Ссылки на элементы
 const uploadInput = document.querySelector('.img-upload__input');
-const submitButton = document.querySelector('.img-upload__submit');
+const submitButton = document.querySelector('#upload-submit');
 const uploadOverlay = document.querySelector('.img-upload__overlay');
 const body = document.querySelector('body');
 const uploadCancelButton = document.querySelector('.img-upload__cancel');
@@ -14,6 +22,9 @@ const effectLevel = document.querySelector('.effect-level');
 const effectLevelValue = document.querySelector('.effect-level__value');
 const effectRadioButtons = document.querySelectorAll('.effects__radio');
 const sliderElement = document.querySelector('.effect-level__slider');
+const successTemplate = document.querySelector('#success').content.querySelector('.success');
+const errorTemplate = document.querySelector('#error').content.querySelector('.error');
+//const form = document.querySelector('#upload-select-image');
 
 // Обновление эффекта изображения
 const updateImageEffect = (effect, value) => {
@@ -117,15 +128,23 @@ const onEffectChange = (evt) => {
   }
 };
 
+// Функция для возврата формы в исходное состояние
+const resetFormState = () => {
+  pristine.reset(); // Сбрасываем ошибки валидации
+  document.querySelector('.effects__radio[value="none"]').checked = true;
+  hashtagsInput.value = ''; // Очистка поля
+  descriptionInput.value = '';
+  imgPreview.style.filter = '';
+  imgPreview.style.transform = 'scale(1)';
+  scaleValueField.value = '100%';
+  effectLevel.classList.add('hidden');
+};
+
 // Открытие формы редактирования
 const openUploadForm = () => {
   uploadOverlay.classList.remove('hidden');
   body.classList.add('modal-open');
-
-  // Сбрасываем эффект на дефолтный при каждом открытии формы
-  document.querySelector('.effects__radio[value="none"]').checked = true;
-  imgPreview.style.filter = '';
-  effectLevel.classList.add('hidden'); // Скрываем слайдер для дефолтного эффекта
+  resetFormState(); // Сбрасываем форму при открытии // Скрываем слайдер для дефолтного эффекта
 };
 
 uploadInput.addEventListener('change', () => {
@@ -133,12 +152,12 @@ uploadInput.addEventListener('change', () => {
 
   if (file) {
     const reader = new FileReader();
-
     reader.onload = (event) => {
-      imgPreview.src = event.target.result; // Установка загруженного изображения в src элемента imgPreview
+      imgPreview.src = event.target.result;
     };
 
     reader.readAsDataURL(file);
+    submitButton.disabled = false;
   }
 
   openUploadForm();
@@ -180,11 +199,6 @@ document.addEventListener('keydown', (evt) => {
   }
 });
 
-// Масштаб изображения
-const MIN_SCALE = 25;
-const MAX_SCALE = 100;
-const SCALE_STEP = 25;
-
 const onScaleChange = (value) => {
   imgPreview.style.transform = `scale(${value / 100})`;
   scaleValueField.value = `${value}%`;
@@ -215,4 +229,42 @@ effectLevel.classList.add('hidden'); // Скрываем слайдер для �
 
 effectRadioButtons.forEach((button) => {
   button.addEventListener('change', onEffectChange);
+});
+
+// Обработка отправки формы
+form.addEventListener('submit', (event) => {
+  event.preventDefault(); // Отключаем стандартное поведение отправки формы
+
+  if (pristine.validate()) { // Проверка валидности формы
+    const formData = new FormData(form); // Сбор данных формы
+    submitButton.disabled = true; // Блокируем кнопку отправки
+    sendData(formData)
+      .then(() => {
+        closeUploadForm(); // Закрытие формы
+        showMessage(successTemplate); // Успех
+      })
+      .catch(() => {
+        showMessage(errorTemplate); // Ошибка
+      })
+      .finally(() => {
+        submitButton.disabled = false; // Разблокируем кнопку
+      });
+  }
+});
+
+// Обработка кнопки сброса формы
+const resetButton = document.querySelector('.img-upload__cancel');
+resetButton.addEventListener('click', (evt) => {
+  evt.preventDefault(); // Предотвращаем стандартное поведение кнопки сброса
+  closeUploadForm(); // Закрываем и сбрасываем форму
+});
+
+// Обработка кнопки закрытия
+uploadCancelButton.addEventListener('click', closeUploadForm);
+
+// Обработка клавиши Escape
+document.addEventListener('keydown', (evt) => {
+  if (isEscapeKey(evt) && !uploadOverlay.classList.contains('hidden')) {
+    closeUploadForm();
+  }
 });

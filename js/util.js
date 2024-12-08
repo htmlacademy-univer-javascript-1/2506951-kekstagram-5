@@ -1,11 +1,10 @@
-// Генерация случайного числа в диапазоне от min до max
-export const generationInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
-
 // Функция закрытия полноразмерного фото
 export const closeFullsizePhoto = (bigPictureContainer, body) => {
   bigPictureContainer.classList.add('hidden');
   body.classList.remove('modal-open');
 };
+
+export const isEscapeKey = (evt) => evt.key === 'Escape' || evt.key === 'Esc';
 
 // Функция добавления обработчиков закрытия окна
 export const setupPhotoCloseHandlers = (bigPictureContainer, closeButton, body) => {
@@ -13,13 +12,13 @@ export const setupPhotoCloseHandlers = (bigPictureContainer, closeButton, body) 
 
   closeButton.addEventListener('click', handlePhotoClose);
   document.addEventListener('keydown', (evt) => {
-    if (evt.key === 'Escape') {
+    if (isEscapeKey(evt)) {
       handlePhotoClose();
     }
   });
 };
 
-const form = document.querySelector('.img-upload__text');
+export const form = document.querySelector('.img-upload__form');
 export const hashtagsInput = form.querySelector('.text__hashtags');
 export const descriptionInput = form.querySelector('.text__description');
 
@@ -130,9 +129,9 @@ form.addEventListener('input', toggleSubmitButton);
 
 // Отключение закрытия формы при нажатии на Esc в полях ввода
 [hashtagsInput, descriptionInput].forEach((input) => {
-  input.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') {
-      event.stopPropagation();
+  input.addEventListener('keydown', (evt) => {
+    if (isEscapeKey) {
+      evt.stopPropagation();
     }
   });
 });
