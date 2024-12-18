@@ -1,9 +1,15 @@
 import { renderFullsizePhoto } from './fullsizePhoto.js';
-import { getData } from './api.js'; // Подключаем модуль для работы с API
+import { getData } from './api.js';
 import { showErrorModal } from './message.js';
+import { setupFilters } from './sort.js';
 
 const picturesContainer = document.querySelector('.pictures');
 const pictureTemplate = document.getElementById('picture').content;
+
+// Функция для очистки контейнера с миниатюрами
+const clearPictures = () => {
+  picturesContainer.querySelectorAll('.picture').forEach((picture) => picture.remove());
+};
 
 // Функция для отрисовки миниатюр
 const renderPictures = (photoData) => {
@@ -17,7 +23,6 @@ const renderPictures = (photoData) => {
     pictureElement.querySelector('.picture__likes').textContent = photo.likes;
     pictureElement.querySelector('.picture__comments').textContent = photo.comments.length;
 
-    // Открытие полноразмерного изображения при клике
     pictureElement.querySelector('.picture').addEventListener('click', () => {
       renderFullsizePhoto(photo);
     });
@@ -29,12 +34,16 @@ const renderPictures = (photoData) => {
 };
 
 // Основная функция для загрузки и отрисовки данных
-export const initializeGallery = async () => {
+const initializeGallery = async () => {
   try {
-    const photoData = await getData(); // Используем getData из API модуля
+    const photoData = await getData();
     renderPictures(photoData);
+
+    // Настройка фильтров через модуль sort.js
+    setupFilters(photoData, renderPictures, clearPictures);
   } catch (error) {
-    showErrorModal();// Логируем ошибку для отладки
-    // Здесь можно вызвать функцию отображения модального окна ошибки
+    showErrorModal();
   }
 };
+
+export { initializeGallery };

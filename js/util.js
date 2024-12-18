@@ -1,13 +1,14 @@
 // Функция закрытия полноразмерного фото
-export const closeFullsizePhoto = (bigPictureContainer, body) => {
+const closeFullsizePhoto = (bigPictureContainer, body) => {
   bigPictureContainer.classList.add('hidden');
   body.classList.remove('modal-open');
 };
 
-export const isEscapeKey = (evt) => evt.key === 'Escape' || evt.key === 'Esc';
+
+const isEscapeKey = (evt) => evt.key === 'Escape' || evt.key === 'Esc';
 
 // Функция добавления обработчиков закрытия окна
-export const setupPhotoCloseHandlers = (bigPictureContainer, closeButton, body) => {
+const setupPhotoCloseHandlers = (bigPictureContainer, closeButton, body) => {
   const handlePhotoClose = () => closeFullsizePhoto(bigPictureContainer, body);
 
   closeButton.addEventListener('click', handlePhotoClose);
@@ -18,12 +19,13 @@ export const setupPhotoCloseHandlers = (bigPictureContainer, closeButton, body) 
   });
 };
 
-export const form = document.querySelector('.img-upload__form');
-export const hashtagsInput = form.querySelector('.text__hashtags');
-export const descriptionInput = form.querySelector('.text__description');
+const form = document.querySelector('.img-upload__form');
+const hashtagsInput = form.querySelector('.text__hashtags');
+const descriptionInput = form.querySelector('.text__description');
+const FILE_TYPES = ['jpg', 'jpeg', 'png'];
 
 // Инициализация Pristine
-export const pristine = new Pristine(form, {
+const pristine = new Pristine(form, {
   classTo: 'img-upload__field-wrapper',
   errorClass: 'has-error',
   successClass: 'has-success',
@@ -135,3 +137,15 @@ form.addEventListener('input', toggleSubmitButton);
     }
   });
 });
+
+const debounce = (callback, timeoutDelay = 500) => {
+  let timeoutId;
+
+  return (...rest) => {
+    clearTimeout(timeoutId);
+
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
+};
+
+export { closeFullsizePhoto, isEscapeKey, setupPhotoCloseHandlers, form, hashtagsInput, descriptionInput, FILE_TYPES, pristine, debounce };
