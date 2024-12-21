@@ -1,5 +1,5 @@
 import {pristine, form, hashtagsInput, descriptionInput, isEscapeKey} from './util.js';
-import { sendData } from './api.js'; // Импорт функции отправки данных
+import { sendData } from './api.js';
 import { showMessage } from './message.js';
 
 
