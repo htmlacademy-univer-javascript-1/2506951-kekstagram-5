@@ -9,13 +9,13 @@ const socialCaption = bigPictureContainer.querySelector('.social__caption');
 const commentCountBlock = bigPictureContainer.querySelector('.social__comment-count');
 const commentsLoader = bigPictureContainer.querySelector('.comments-loader');
 const closeButton = bigPictureContainer.querySelector('.big-picture__cancel');
+const COMMENTS_PER_LOAD = 5;
 
 // Установка обработчиков закрытия окна
 setupPhotoCloseHandlers(bigPictureContainer, closeButton, document.body);
 
 let commentsData = [];
 let currentCommentsShown = 0;
-const COMMENTS_PER_LOAD = 5;
 
 // Функция для отрисовки комментариев
 const renderComments = () => {
@@ -58,7 +58,7 @@ const renderFullsizePhoto = ({ url, likes, comments, description }) => {
   // Показываем блоки с количеством комментариев и кнопкой загрузки
   commentCountBlock.classList.remove('hidden');
 
-  if (commentsData.length > 5) {
+  if (commentsData.length > COMMENTS_PER_LOAD) {
     commentsLoader.classList.remove('hidden');
   }
   document.body.classList.add('modal-open');

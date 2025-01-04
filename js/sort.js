@@ -1,7 +1,6 @@
-import { debounce } from './util.js';
+import { debounce, DEBOUNCE_DELAY } from './util.js';
 
 const RANDOM_PHOTOS_COUNT = 10;
-const DEBOUNCE_DELAY = 500;
 
 // Сортировка по умолчанию
 const getDefaultPhotos = (photos) => photos;
@@ -23,29 +22,41 @@ const setupFilters = (photoData, renderPictures, clearPictures) => {
   // Показать фильтры
   imgFilters.classList.remove('img-filters--inactive');
 
-  // Добавить обработчики фильтров
+  // Переменная для хранения последнего выбранного фильтра
+  let lastFilterId = 'filter-default';
+
+  // Отрисовка с устранением дребезга
+  const debouncedRender = debounce(() => {
+    clearPictures();
+
+    let sortedPhotos = [];
+    if (lastFilterId === 'filter-default') {
+      sortedPhotos = getDefaultPhotos(photoData);
+    } else if (lastFilterId === 'filter-random') {
+      sortedPhotos = getRandomPhotos(photoData);
+    } else if (lastFilterId === 'filter-discussed') {
+      sortedPhotos = getDiscussedPhotos(photoData);
+    }
+
+    renderPictures(sortedPhotos);
+  }, DEBOUNCE_DELAY);
+
+  // Обработчики кликов на кнопках фильтров
   filterButtons.forEach((button) => {
-    button.addEventListener(
-      'click',
-      debounce((evt) => {
-        filterButtons.forEach((btn) => btn.classList.remove('img-filters__button--active'));
-        evt.target.classList.add('img-filters__button--active');
+    button.addEventListener('click', (evt) => {
+      // Удалить активный класс у всех кнопок
+      filterButtons.forEach((btn) => btn.classList.remove('img-filters__button--active'));
 
-        clearPictures();
+      // Добавить активный класс выбранной кнопке
+      evt.target.classList.add('img-filters__button--active');
 
-        let sortedPhotos = [];
-        if (evt.target.id === 'filter-default') {
-          sortedPhotos = getDefaultPhotos(photoData);
-        } else if (evt.target.id === 'filter-random') {
-          sortedPhotos = getRandomPhotos(photoData);
-        } else if (evt.target.id === 'filter-discussed') {
-          sortedPhotos = getDiscussedPhotos(photoData);
-        }
+      // Запомнить последний выбранный фильтр
+      lastFilterId = evt.target.id;
 
-        renderPictures(sortedPhotos);
-      }, DEBOUNCE_DELAY)
-    );
+      // Запустить отрисовку (с дебаунсом)
+      debouncedRender();
+    });
   });
 };
 
-export{ setupFilters };
+export { setupFilters };

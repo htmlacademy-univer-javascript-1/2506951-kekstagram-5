@@ -1,3 +1,8 @@
+const HASH_LENGTH = 20;
+const HASH_AMOUNT = 5;
+const DESCRIPTION_LENGTH = 140;
+const DEBOUNCE_DELAY = 500;
+
 // Функция закрытия полноразмерного фото
 const closeFullsizePhoto = (bigPictureContainer, body) => {
   bigPictureContainer.classList.add('hidden');
@@ -47,13 +52,13 @@ const isInvalidHashtag = (hash) => {
     (hashtag) => hashtag.startsWith('#'), // Начинается с #
     (hashtag) => hashtag.length > 1, // Не только #
     (hashtag) => /^[a-zA-Z0-9]+$/.test(hashtag.slice(1)), // Состоит из букв и цифр
-    (hashtag) => hashtag.length <= 20, // Максимальная длина 20 символов
+    (hashtag) => hashtag.length <= HASH_LENGTH, // Максимальная длина 20 символов
   ];
   return !rules.every((rule) => rule(hash));
 };
 
 // Функция проверки на количество хэштегов
-const isExceedingHashtagsCount = (hashtags) => hashtags.length > 5;
+const isExceedingHashtagsCount = (hashtags) => hashtags.length > HASH_AMOUNT;
 
 // Функция проверки на уникальность хэштегов
 const hasDuplicateHashtags = (hashtags) => {
@@ -89,7 +94,7 @@ const validateUniqueHashtags = (value) => {
 };
 
 // Валидация комментария
-const validateDescriptionLength = (value) => value.length <= 140;
+const validateDescriptionLength = (value) => value.length <= DESCRIPTION_LENGTH;
 
 // Регистрация валидаторов в Pristine
 pristine.addValidator(
@@ -138,7 +143,7 @@ form.addEventListener('input', toggleSubmitButton);
   });
 });
 
-const debounce = (callback, timeoutDelay = 500) => {
+const debounce = (callback, timeoutDelay = DEBOUNCE_DELAY) => {
   let timeoutId;
 
   return (...rest) => {
@@ -148,4 +153,4 @@ const debounce = (callback, timeoutDelay = 500) => {
   };
 };
 
-export { closeFullsizePhoto, isEscapeKey, setupPhotoCloseHandlers, form, hashtagsInput, descriptionInput, FILE_TYPES, pristine, debounce };
+export { closeFullsizePhoto, isEscapeKey, setupPhotoCloseHandlers, form, hashtagsInput, descriptionInput, FILE_TYPES, pristine, debounce, DEBOUNCE_DELAY };

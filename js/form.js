@@ -24,7 +24,6 @@ const effectRadioButtons = document.querySelectorAll('.effects__radio');
 const sliderElement = document.querySelector('.effect-level__slider');
 const successTemplate = document.querySelector('#success').content.querySelector('.success');
 const errorTemplate = document.querySelector('#error').content.querySelector('.error');
-//const form = document.querySelector('#upload-select-image');
 
 // Обновление эффекта изображения
 const updateImageEffect = (effect, value) => {
