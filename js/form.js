@@ -2,7 +2,6 @@ import {pristine, form, hashtagsInput, descriptionInput, isEscapeKey} from './ut
 import { sendData } from './api.js';
 import { showMessage } from './message.js';
 
-
 // Масштаб изображения
 const MIN_SCALE = 25;
 const MAX_SCALE = 100;

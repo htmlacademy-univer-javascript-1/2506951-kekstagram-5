@@ -2,6 +2,11 @@ const HASH_LENGTH = 20;
 const HASH_AMOUNT = 5;
 const DESCRIPTION_LENGTH = 140;
 const DEBOUNCE_DELAY = 500;
+const FILE_TYPES = ['jpg', 'jpeg', 'png'];
+
+const form = document.querySelector('.img-upload__form');
+const hashtagsInput = form.querySelector('.text__hashtags');
+const descriptionInput = form.querySelector('.text__description');
 
 // Функция закрытия полноразмерного фото
 const closeFullsizePhoto = (bigPictureContainer, body) => {
@@ -23,11 +28,6 @@ const setupPhotoCloseHandlers = (bigPictureContainer, closeButton, body) => {
     }
   });
 };
-
-const form = document.querySelector('.img-upload__form');
-const hashtagsInput = form.querySelector('.text__hashtags');
-const descriptionInput = form.querySelector('.text__description');
-const FILE_TYPES = ['jpg', 'jpeg', 'png'];
 
 // Инициализация Pristine
 const pristine = new Pristine(form, {
