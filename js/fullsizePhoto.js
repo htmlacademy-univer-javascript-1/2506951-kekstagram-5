@@ -1,5 +1,7 @@
 import { setupPhotoCloseHandlers } from './util.js';
 
+const COMMENTS_PER_LOAD = 5;
+
 const bigPictureContainer = document.querySelector('.big-picture');
 const bigPictureImage = bigPictureContainer.querySelector('.big-picture__img img');
 const likesCount = bigPictureContainer.querySelector('.likes-count');
@@ -9,7 +11,7 @@ const socialCaption = bigPictureContainer.querySelector('.social__caption');
 const commentCountBlock = bigPictureContainer.querySelector('.social__comment-count');
 const commentsLoader = bigPictureContainer.querySelector('.comments-loader');
 const closeButton = bigPictureContainer.querySelector('.big-picture__cancel');
-const COMMENTS_PER_LOAD = 5;
+
 
 // Установка обработчиков закрытия окна
 setupPhotoCloseHandlers(bigPictureContainer, closeButton, document.body);

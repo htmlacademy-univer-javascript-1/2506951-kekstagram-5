@@ -23,6 +23,7 @@ const effectRadioButtons = document.querySelectorAll('.effects__radio');
 const sliderElement = document.querySelector('.effect-level__slider');
 const successTemplate = document.querySelector('#success').content.querySelector('.success');
 const errorTemplate = document.querySelector('#error').content.querySelector('.error');
+const resetButton = document.querySelector('.img-upload__cancel');
 
 // Обновление эффекта изображения
 const updateImageEffect = (effect, value) => {
@@ -251,7 +252,6 @@ form.addEventListener('submit', (event) => {
 });
 
 // Обработка кнопки сброса формы
-const resetButton = document.querySelector('.img-upload__cancel');
 resetButton.addEventListener('click', (evt) => {
   evt.preventDefault(); // Предотвращаем стандартное поведение кнопки сброса
   closeUploadForm(); // Закрываем и сбрасываем форму
