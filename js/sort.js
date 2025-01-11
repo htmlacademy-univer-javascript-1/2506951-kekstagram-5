@@ -2,6 +2,9 @@ import { debounce, DEBOUNCE_DELAY } from './util.js';
 
 const RANDOM_PHOTOS_COUNT = 10;
 
+const imgFilters = document.querySelector('.img-filters');
+const filterButtons = imgFilters.querySelectorAll('.img-filters__button');
+
 // Сортировка по умолчанию
 const getDefaultPhotos = (photos) => photos;
 
@@ -16,9 +19,6 @@ const getDiscussedPhotos = (photos) => photos.slice().sort((a, b) => b.comments.
 
 // Настройка фильтров
 const setupFilters = (photoData, renderPictures, clearPictures) => {
-  const imgFilters = document.querySelector('.img-filters');
-  const filterButtons = imgFilters.querySelectorAll('.img-filters__button');
-
   // Показать фильтры
   imgFilters.classList.remove('img-filters--inactive');
 

@@ -7,6 +7,7 @@ const FILE_TYPES = ['jpg', 'jpeg', 'png'];
 const form = document.querySelector('.img-upload__form');
 const hashtagsInput = form.querySelector('.text__hashtags');
 const descriptionInput = form.querySelector('.text__description');
+const submitButton = document.querySelector('.img-upload__submit');
 
 // Функция закрытия полноразмерного фото
 const closeFullsizePhoto = (bigPictureContainer, body) => {
@@ -123,7 +124,6 @@ pristine.addValidator(
 
 // Функция для включения/отключения кнопки
 const toggleSubmitButton = () => {
-  const submitButton = document.querySelector('.img-upload__submit');
   const isValid = pristine.validate(); // Проверка всех валидаторов
   submitButton.disabled = !isValid;
 };
